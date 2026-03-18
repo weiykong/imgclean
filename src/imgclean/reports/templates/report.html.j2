@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>imgclean — Dataset Audit Report</title>
+  <style>
+    /* ---- reset / base ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px;
+           background: #f8f9fa; color: #212529; line-height: 1.5; }
+    a { color: #0d6efd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---- layout ---- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+    header { background: #212529; color: #fff; padding: 20px 0; margin-bottom: 32px; }
+    header .container { display: flex; align-items: center; gap: 16px; }
+    header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    header .meta { font-size: 12px; opacity: .7; }
+
+    /* ---- summary cards ---- */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+             gap: 16px; margin-bottom: 32px; }
+    .card { background: #fff; border: 1px solid #dee2e6; border-radius: 8px;
+            padding: 16px; text-align: center; }
+    .card .value { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .card .label { font-size: 12px; color: #6c757d; margin-top: 4px; }
+    .card.error   .value { color: #dc3545; }
+    .card.warning .value { color: #fd7e14; }
+    .card.info    .value { color: #0d6efd; }
+    .card.ok      .value { color: #198754; }
+
+    /* ---- issue sections ---- */
+    .section { background: #fff; border: 1px solid #dee2e6; border-radius: 8px;
+               padding: 20px; margin-bottom: 24px; }
+    .section h2 { font-size: 1rem; font-weight: 600; margin-bottom: 12px;
+                  display: flex; align-items: center; gap: 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px;
+             font-size: 11px; font-weight: 600; }
+    .badge-error   { background: #f8d7da; color: #842029; }
+    .badge-warning { background: #fff3cd; color: #664d03; }
+    .badge-info    { background: #cfe2ff; color: #084298; }
+
+    /* ---- findings table ---- */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 8px 12px; background: #f8f9fa;
+         border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+    td { padding: 7px 12px; border-bottom: 1px solid #f0f0f0; word-break: break-all; }
+    tr:hover td { background: #f8f9fa; }
+    .score { font-variant-numeric: tabular-nums; }
+
+    /* ---- duplicate clusters ---- */
+    .cluster { border: 1px solid #dee2e6; border-radius: 6px; padding: 12px;
+               margin-bottom: 12px; }
+    .cluster-id { font-size: 11px; color: #6c757d; margin-bottom: 8px; }
+    .cluster-files { list-style: none; }
+    .cluster-files li { padding: 2px 0; word-break: break-all; }
+    .cluster-files li:first-child { font-weight: 600; color: #198754; }
+    .cluster-files li:first-child::after { content: " ✓ keep"; font-size: 11px;
+                                           color: #198754; font-weight: 400; }
+
+    /* ---- empty state ---- */
+    .empty { text-align: center; padding: 40px; color: #6c757d; }
+    .empty .icon { font-size: 3rem; margin-bottom: 8px; }
+
+    footer { text-align: center; font-size: 12px; color: #6c757d;
+             margin-top: 40px; padding-bottom: 40px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <h1>imgclean — Dataset Audit Report</h1>
+      <div class="meta">
+        Scanned: <strong>{{ summary.scan_root }}</strong> &nbsp;·&nbsp;
+        Generated: {{ summary.generated_at }} &nbsp;·&nbsp;
+        Duration: {{ duration }}
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Summary cards -->
+  <div class="cards">
+    <div class="card ok">
+      <div class="value">{{ summary.total_files }}</div>
+      <div class="label">Total Files</div>
+    </div>
+    <div class="card ok">
+      <div class="value">{{ summary.scanned_files }}</div>
+      <div class="label">Scanned OK</div>
+    </div>
+    <div class="card {% if summary.corrupted_files > 0 %}error{% else %}ok{% endif %}">
+      <div class="value">{{ summary.corrupted_files }}</div>
+      <div class="label">Corrupted</div>
+    </div>
+    <div class="card {% if summary.findings_count > 0 %}warning{% else %}ok{% endif %}">
+      <div class="value">{{ summary.findings_count }}</div>
+      <div class="label">Total Findings</div>
+    </div>
+    {% for issue, count in summary.issue_counts.items() %}
+    <div class="card warning">
+      <div class="value">{{ count }}</div>
+      <div class="label">{{ issue | replace("_", " ") | title }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if summary.findings_count == 0 %}
+  <div class="section">
+    <div class="empty">
+      <div class="icon">✅</div>
+      <p>No issues detected — dataset looks clean!</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Per-issue-type sections -->
+  {% for issue_type, group in findings_by_type.items() %}
+  <div class="section">
+    <h2>
+      {{ issue_type | replace("_", " ") | title }}
+      <span class="badge badge-{{ group[0].severity }}">{{ group | length }}</span>
+    </h2>
+
+    {% if issue_type in ["exact_duplicate", "near_duplicate", "embedding_duplicate", "split_leakage"] %}
+    <!-- Cluster view for group-based issues -->
+    {% set clusters = {} %}
+    {% for f in group %}
+      {% if f.group_id %}
+        {% if f.group_id not in clusters %}{% set _ = clusters.update({f.group_id: []}) %}{% endif %}
+        {% set _ = clusters[f.group_id].append(f) %}
+      {% endif %}
+    {% endfor %}
+
+    {% for gid, cluster_findings in clusters.items() %}
+    <div class="cluster">
+      <div class="cluster-id">Group {{ gid }}</div>
+      <ul class="cluster-files">
+        {% for f in cluster_findings %}
+        <li>{{ f.file_path }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <!-- Table view for per-file issues -->
+    <table>
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Severity</th>
+          <th>Score</th>
+          <th>Threshold</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in group %}
+        <tr>
+          <td>{{ f.file_path }}</td>
+          <td><span class="badge badge-{{ f.severity }}">{{ f.severity }}</span></td>
+          <td class="score">{% if f.score is not none %}{{ "%.2f" | format(f.score) }}{% endif %}</td>
+          <td class="score">{% if f.threshold is not none %}{{ "%.2f" | format(f.threshold) }}{% endif %}</td>
+          <td>{{ f.message }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+</div>
+
+<footer>
+  Generated by <a href="https://github.com/weiyuankong/imgclean">imgclean</a>
+</footer>
+
+</body>
+</html>
