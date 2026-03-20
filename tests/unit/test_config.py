@@ -58,3 +58,7 @@ class TestThresholdsValidation:
     def test_invalid_exposure_order_raises(self) -> None:
         with pytest.raises(ValueError):
             ThresholdsConfig(exposure_dark_max=200, exposure_bright_min=100)
+
+    def test_invalid_parallel_workers_raises(self) -> None:
+        with pytest.raises(ValueError, match="max_workers"):
+            Config.model_validate({"parallel": {"max_workers": 0}})

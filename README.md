@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![CI](https://github.com/Weiykong/imgclean/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Weiykong/imgclean/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/badge/pypi-imgclean-orange?logo=pypi&logoColor=white)](https://pypi.org/project/imgclean/)
-[![Tests](https://img.shields.io/badge/tests-45%20cases-brightgreen)](#-test-suite)
+[![Tests](https://img.shields.io/badge/tests-50%20cases-brightgreen)](#-test-suite)
 
 </div>
 
@@ -16,16 +16,19 @@
 
 Most image datasets have hidden problems. imgclean makes them obvious in one pass, with a CLI that is fast to try and reports that are easy to review with a team.
 
-```
-Dataset scanned: 12,438 files  (4.2s)
-───────────────────────────────────────
-  214   exact duplicates
-1,083   near-duplicates
-   97   blurry images
-   41   corrupted files
-   63   train/val leakage cases
-   18   low-resolution images
-    9   extreme aspect ratios
+```text
+$ imgclean scan ./dataset --workers 8 --report-dir ./reports
+                      Scan Summary
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃ Metric              ┃ Value ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│ Total files         │ 12438 │
+│ Scanned OK          │ 12397 │
+│ Corrupted           │    41 │
+│ Total findings      │  1525 │
+│   ↳ near duplicate  │  1083 │
+│   ↳ exact duplicate │   214 │
+└─────────────────────┴───────┘
 ```
 
 <p align="center">
@@ -36,18 +39,19 @@ Dataset scanned: 12,438 files  (4.2s)
 
 - One command to scan a dataset and export HTML, JSON, and CSV reports.
 - Built-in checks for corruption, blur, exposure, resolution, aspect ratio, duplicates, and split leakage.
+- Parallel scan path with `--workers` and config-based `parallel.max_workers`.
 - Works as both a CLI tool and a Python API for pipelines and notebooks.
-- Safe cleanup workflow with quarantine and representative-keep actions.
-- Test-backed core with 45 automated test cases and GitHub Actions CI.
+- Safe cleanup workflow with `clean`, `quarantine`, and representative-keep actions.
+- Test-backed core with 50 automated test cases and GitHub Actions CI.
 
 ## Try it in 60 seconds
 
 ```bash
 pip install imgclean
-imgclean scan ./dataset --report-dir ./reports --open
+imgclean clean ./dataset --workers 8 --report-dir ./reports
 ```
 
-The scan writes a shareable HTML report plus machine-readable JSON and CSV outputs in `./reports`.
+The command writes a shareable HTML report plus machine-readable JSON and CSV outputs in `./reports`, then previews the quarantine plan without moving anything unless you add `--execute`.
 
 ---
 
@@ -56,6 +60,7 @@ The scan writes a shareable HTML report plus machine-readable JSON and CSV outpu
 - [Why imgclean](#-why-imgclean)
 - [Highlights](#highlights)
 - [Try it in 60 seconds](#try-it-in-60-seconds)
+- [Compared with other workflows](#-compared-with-other-workflows)
 - [Installation](#-installation)
 - [Quick start](#-quick-start)
 - [CLI reference](#-cli-reference)
@@ -86,6 +91,17 @@ imgclean makes these problems **visible** in seconds and gives you tools to **fi
 
 ---
 
+## 🥊 Compared with other workflows
+
+| Workflow | Duplicate + leakage checks | Cleanup actions | Shareable reports | Best fit |
+|---|---|---|---|---|
+| `imgclean` | ✅ built in | ✅ `clean` / `quarantine` | ✅ HTML + JSON + CSV | Pre-training dataset QA |
+| `cleanvision` | ✅ focused on image issues | ❌ review-only | ⚠️ notebook/report oriented | Exploratory dataset analysis |
+| `FiftyOne` | ⚠️ possible with app workflows | ⚠️ manual curation flows | ✅ interactive app views | Large visual review workflows |
+| Manual scripts | ⚠️ custom only | ⚠️ custom only | ❌ usually none | One-off internal jobs |
+
+---
+
 ## 📦 Installation
 
 ```bash
@@ -103,6 +119,7 @@ pip install "imgclean[embeddings]"   # torch + open_clip + faiss-cpu
 ```bash
 git clone https://github.com/Weiykong/imgclean.git
 cd imgclean
+python3 -m pip install --user uv
 make install
 make test
 ```
@@ -117,16 +134,19 @@ make test
 
 ```bash
 # Full audit — produces HTML, JSON, and CSV reports
-imgclean scan ./dataset --report-dir ./reports --open
+imgclean scan ./dataset --workers 8 --report-dir ./reports --open
 
 # Duplicates only, strict threshold
-imgclean dedup ./dataset --threshold 4
+imgclean dedup ./dataset --threshold 4 --workers 8
 
 # Check train/val/test splits for data leakage
 imgclean leakage ./train ./val ./test
 
 # Quality checks (blur, exposure, resolution)
-imgclean quality ./dataset
+imgclean quality ./dataset --workers 8
+
+# Scan and preview a cleanup plan in one step
+imgclean clean ./dataset --issues corrupted,blurry --report-dir ./reports
 
 # Preview what would be quarantined, then do it
 imgclean quarantine ./dataset --issues corrupted,blurry
@@ -178,10 +198,11 @@ imgclean scan <path> [OPTIONS]
 | `--no-csv` | false | Skip CSV report |
 | `--open` | false | Open HTML in browser after scan |
 | `--no-cache` | false | Disable feature cache |
+| `--workers, -w` | auto | Max worker threads for image scanning |
 | `--verbose, -v` | false | Debug logging |
 
 ```bash
-imgclean scan ./dataset --report-dir ./audit --open --config imgclean.yaml
+imgclean scan ./dataset --workers 8 --report-dir ./audit --open --config imgclean.yaml
 ```
 
 ---
@@ -196,9 +217,10 @@ imgclean dedup <path> [OPTIONS]
 |---|---|---|
 | `--threshold, -t` | `8` | Max Hamming distance (0 = exact byte matches only) |
 | `--report-dir, -o` | `.` | Output directory |
+| `--workers, -w` | auto | Max worker threads for image scanning |
 
 ```bash
-imgclean dedup ./dataset --threshold 6
+imgclean dedup ./dataset --threshold 6 --workers 8
 imgclean dedup ./dataset --threshold 0   # exact duplicates only
 ```
 
@@ -229,6 +251,35 @@ imgclean quality <path> [OPTIONS]
 | `--blur/--no-blur` | Check for blur (default on) |
 | `--exposure/--no-exposure` | Check over/underexposure (default on) |
 | `--resolution/--no-resolution` | Check resolution (default on) |
+| `--workers, -w` | Max worker threads for image scanning |
+
+```bash
+imgclean quality ./dataset --workers 8 --no-exposure
+```
+
+---
+
+### `imgclean clean` — scan then quarantine
+
+```bash
+imgclean clean <path> [OPTIONS]
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `--issues, -i` | all errors | Comma-separated issue types to quarantine |
+| `--out, -o` | `./quarantine` | Destination folder |
+| `--execute` | false | Actually move files (default is dry-run) |
+| `--report-dir` | `.` | Output directory for HTML, JSON, and CSV reports |
+| `--workers, -w` | auto | Max worker threads for image scanning |
+
+```bash
+# Preview cleanup + write reports
+imgclean clean ./dataset --issues corrupted,blurry --workers 8 --report-dir ./reports
+
+# Then execute
+imgclean clean ./dataset --issues corrupted --out ./review --execute
+```
 
 ---
 
@@ -412,6 +463,9 @@ actions:
 cache:
   enabled: true
   dir_name: .imgclean_cache
+
+parallel:
+  max_workers: null       # null = ThreadPoolExecutor default
 ```
 
 </details>
@@ -719,11 +773,11 @@ GPU is used automatically when available; falls back to CPU.
 
 ## 🧪 Test suite
 
-The repo currently ships with **45 automated tests** covering configuration, hashing, duplicate detection, quality checks, reporting, and a synthetic end-to-end scan pipeline.
+The repo currently ships with **50 automated tests** covering configuration, hashing, duplicate detection, parallel scan plumbing, CLI cleanup flows, reporting, and a synthetic end-to-end scan pipeline.
 
 ```bash
 make test
-make lint
+make lint   # C901 complexity gate
 ```
 
 CI runs on Python 3.10, 3.11, and 3.12 for pushes and pull requests.
@@ -746,6 +800,7 @@ CI runs on Python 3.10, 3.11, and 3.12 for pushes and pull requests.
 ```bash
 git clone https://github.com/Weiykong/imgclean.git
 cd imgclean
+python3 -m pip install --user uv
 make install
 make check
 ```
@@ -757,3 +812,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the local setup, command reference, a
 ## License
 
 [MIT](LICENSE) © Wei Yuan Kong
+
+If imgclean saves you dataset cleanup time, consider starring the repo.

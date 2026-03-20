@@ -7,19 +7,20 @@ loader — checks receive fully-populated records and never touch disk directly.
 
 from __future__ import annotations
 
+from functools import partial
+from os.path import commonpath
 from pathlib import Path
-
-from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
 
 from imgclean.config.schema import Config
 from imgclean.features.metadata import file_metadata
 from imgclean.io.cache import FeatureCache
-from imgclean.io.filesystem import discover_images, discover_splits
+from imgclean.io.filesystem import discover_images
 from imgclean.io.hashing import phash as compute_phash, sha256 as compute_sha256
 from imgclean.io.image_loader import load_image
 from imgclean.models.dataset import Dataset
 from imgclean.models.image_record import ImageRecord
 from imgclean.utils.logging import log
+from imgclean.utils.parallel import parallel_map
 
 
 def scan_directory(
@@ -31,7 +32,12 @@ def scan_directory(
     """Scan a single directory and return a Dataset of ImageRecords."""
     paths = discover_images(root, recursive=config.dataset.recursive)
     log.info(f"Found {len(paths)} image(s) in [bold]{root}[/bold]")
-    records = _build_records(paths, config, split=split, cache=cache)
+    records = _build_records(
+        paths,
+        split=split,
+        cache=cache,
+        max_workers=config.parallel.max_workers,
+    )
     return Dataset(records=records, root=root)
 
 
@@ -39,13 +45,7 @@ def scan_splits(splits: dict[str, Path], config: Config) -> Dataset:
     """Scan multiple split directories and return a merged Dataset."""
     all_records: list[ImageRecord] = []
     root_candidates: list[Path] = []
-
-    cache: FeatureCache | None = None
-    if config.cache.enabled:
-        # Use the first split's parent as the cache root
-        first_root = next(iter(splits.values()))
-        cache_dir = first_root.parent / config.cache.dir_name
-        cache = FeatureCache(cache_dir)
+    cache = _build_split_cache(splits, config)
 
     for split_name, directory in splits.items():
         directory = directory.resolve()
@@ -54,51 +54,40 @@ def scan_splits(splits: dict[str, Path], config: Config) -> Dataset:
         log.info(
             f"Split [bold]{split_name!r}[/bold]: {len(paths)} image(s) in {directory}"
         )
-        records = _build_records(paths, config, split=split_name, cache=cache)
+        records = _build_records(
+            paths,
+            split=split_name,
+            cache=cache,
+            max_workers=config.parallel.max_workers,
+        )
         all_records.extend(records)
 
     if cache:
         cache.flush()
 
-    # Find common root
-    root: Path | None = None
-    if root_candidates:
-        try:
-            root = Path(*root_candidates).parent
-        except TypeError:
-            root = root_candidates[0].parent
-
-    return Dataset(records=all_records, root=root)
+    return Dataset(records=all_records, root=_resolve_common_root(root_candidates))
 
 
 def _build_records(
     paths: list[Path],
-    config: Config,
+    *,
     split: str | None,
     cache: FeatureCache | None,
+    max_workers: int | None,
 ) -> list[ImageRecord]:
-    records: list[ImageRecord] = []
-
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TaskProgressColumn(),
-    ) as progress:
-        task = progress.add_task("Scanning images…", total=len(paths))
-
-        for path in paths:
-            record = _build_record(path, split=split, config=config, cache=cache)
-            records.append(record)
-            progress.advance(task)
-
-    return records
+    build_record = partial(_build_record, split=split, cache=cache)
+    return parallel_map(
+        build_record,
+        paths,
+        max_workers=max_workers,
+        description="Scanning images…",
+    )
 
 
 def _build_record(
     path: Path,
+    *,
     split: str | None,
-    config: Config,
     cache: FeatureCache | None,
 ) -> ImageRecord:
     cache_key = str(path)
@@ -135,6 +124,28 @@ def _build_record(
         cache.set(cache_key, _record_to_cache(record, fs_meta["mtime"]))
 
     return record
+
+
+def _build_split_cache(
+    splits: dict[str, Path],
+    config: Config,
+) -> FeatureCache | None:
+    if not config.cache.enabled:
+        return None
+
+    first_root = next(iter(splits.values()))
+    cache_dir = first_root.parent / config.cache.dir_name
+    return FeatureCache(cache_dir)
+
+
+def _resolve_common_root(paths: list[Path]) -> Path | None:
+    if not paths:
+        return None
+
+    try:
+        return Path(commonpath(paths))
+    except ValueError:
+        return paths[0].parent
 
 
 def _cache_is_valid(path: Path, cached: dict) -> bool:

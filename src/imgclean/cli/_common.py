@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Any
 
-import typer
 from rich.console import Console
 from rich.table import Table
 
@@ -14,6 +13,23 @@ from imgclean.reports import write_csv, write_html, write_json
 from imgclean.utils.logging import log
 
 console = Console()
+
+
+def add_optional_workers_override(
+    overrides: dict[str, Any],
+    workers: int | None,
+) -> dict[str, Any]:
+    if workers is not None:
+        overrides["parallel"] = {"max_workers": workers}
+    return overrides
+
+
+def parse_issue_filter(issues: str | None) -> list[str] | None:
+    if issues is None:
+        return None
+
+    parsed = [issue.strip() for issue in issues.split(",") if issue.strip()]
+    return parsed or None
 
 
 def write_reports(report: ScanReport, output_dir: Path, cfg_report) -> None:

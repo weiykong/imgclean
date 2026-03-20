@@ -1,14 +1,16 @@
 .PHONY: install test lint check
+UV=python3 -m uv
 
 install:
-	python -m pip install -e ".[dev]"
+	$(UV) venv --python 3.11
+	$(UV) pip install --python .venv/bin/python -e ".[dev]"
 
 test:
-	python -m pytest
+	$(UV) run pytest
 
 lint:
-	ruff check .
+	$(UV) run ruff check --select C901 src tests
 
 check:
-	ruff check .
-	python -m pytest
+	$(UV) run ruff check --select C901 src tests
+	$(UV) run pytest

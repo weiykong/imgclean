@@ -11,7 +11,7 @@ from imgclean.core.scanner import scan_directory, scan_splits
 from imgclean.models.finding import Finding
 from imgclean.models.report import ReportSummary, ScanReport
 from imgclean.utils.logging import log
-from imgclean.utils.timing import timer, format_duration
+from imgclean.utils.timing import format_duration, timer
 
 
 def run_scan(
@@ -77,13 +77,18 @@ def _build_dataset(
         cache = FeatureCache(cache_dir)
 
     from imgclean.core.scanner import _build_records
-    from imgclean.models.dataset import Dataset
     from imgclean.io.filesystem import discover_images
+    from imgclean.models.dataset import Dataset
 
     all_records = []
     for root in paths:
         imgs = discover_images(root, recursive=config.dataset.recursive)
-        records = _build_records(imgs, config, split=None, cache=cache)
+        records = _build_records(
+            imgs,
+            split=None,
+            cache=cache,
+            max_workers=config.parallel.max_workers,
+        )
         all_records.extend(records)
 
     if cache:

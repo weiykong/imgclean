@@ -7,7 +7,7 @@ from typing import Optional
 
 import typer
 
-from imgclean.cli._common import print_summary, write_reports
+from imgclean.cli._common import add_optional_workers_override, print_summary, write_reports
 from imgclean.config.loader import load_config
 from imgclean.core.orchestrator import run_scan
 from imgclean.utils.logging import configure_logging
@@ -30,12 +30,18 @@ def scan(
     open_browser: bool = typer.Option(False, "--open", help="Open HTML report in browser."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose logging."),
     no_cache: bool = typer.Option(False, "--no-cache", help="Disable feature cache."),
+    workers: Optional[int] = typer.Option(
+        None,
+        "--workers",
+        "-w",
+        min=1,
+        help="Maximum number of worker threads for image scanning.",
+    ),
 ) -> None:
     configure_logging(verbose)
 
-    config = load_config(
-        config_file,
-        overrides={
+    overrides = add_optional_workers_override(
+        {
             "dataset": {"path": str(path)},
             "report": {
                 "html": not no_html,
@@ -46,7 +52,9 @@ def scan(
             },
             "cache": {"enabled": not no_cache},
         },
+        workers,
     )
+    config = load_config(config_file, overrides=overrides)
 
     report = run_scan(paths=[path.resolve()], config=config)
 

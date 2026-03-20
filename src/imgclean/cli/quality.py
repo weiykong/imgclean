@@ -7,7 +7,7 @@ from typing import Optional
 
 import typer
 
-from imgclean.cli._common import print_summary, write_reports
+from imgclean.cli._common import add_optional_workers_override, print_summary, write_reports
 from imgclean.config.loader import load_config
 from imgclean.core.orchestrator import run_scan
 from imgclean.utils.logging import configure_logging
@@ -24,12 +24,18 @@ def quality(
     config_file: Optional[Path] = typer.Option(None, "--config", "-c"),
     report_dir: Optional[Path] = typer.Option(None, "--report-dir", "-o"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
+    workers: Optional[int] = typer.Option(
+        None,
+        "--workers",
+        "-w",
+        min=1,
+        help="Maximum number of worker threads for image scanning.",
+    ),
 ) -> None:
     configure_logging(verbose)
 
-    config = load_config(
-        config_file,
-        overrides={
+    overrides = add_optional_workers_override(
+        {
             "dataset": {"path": str(path)},
             "checks": {
                 "corruption": True,
@@ -45,7 +51,9 @@ def quality(
             },
             "report": {"output_dir": str(report_dir or Path.cwd())},
         },
+        workers,
     )
+    config = load_config(config_file, overrides=overrides)
 
     report = run_scan(paths=[path.resolve()], config=config)
     print_summary(report)

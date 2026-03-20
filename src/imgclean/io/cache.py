@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,7 @@ class FeatureCache:
     def __init__(self, cache_dir: Path, name: str = "features") -> None:
         self._path = cache_dir / f"{name}.json"
         self._data: dict[str, Any] = {}
+        self._lock = threading.Lock()
 
         if self._path.exists():
             try:
@@ -30,23 +32,28 @@ class FeatureCache:
                 self._data = {}
 
     def get(self, key: str) -> dict[str, Any] | None:
-        return self._data.get(key)
+        with self._lock:
+            return self._data.get(key)
 
     def set(self, key: str, value: dict[str, Any]) -> None:
-        self._data[key] = value
+        with self._lock:
+            self._data[key] = value
 
     def flush(self) -> None:
         """Write the cache to disk."""
+        with self._lock:
+            payload = json.dumps(self._data, indent=2)
         self._path.parent.mkdir(parents=True, exist_ok=True)
-        self._path.write_text(
-            json.dumps(self._data, indent=2), encoding="utf-8"
-        )
+        self._path.write_text(payload, encoding="utf-8")
 
     def invalidate(self, key: str) -> None:
-        self._data.pop(key, None)
+        with self._lock:
+            self._data.pop(key, None)
 
     def clear(self) -> None:
-        self._data = {}
+        with self._lock:
+            self._data = {}
 
     def __len__(self) -> int:
-        return len(self._data)
+        with self._lock:
+            return len(self._data)

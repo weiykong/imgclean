@@ -66,6 +66,12 @@ class ActionsConfig(BaseModel):
 class ParallelConfig(BaseModel):
     max_workers: int | None = D.MAX_WORKERS
 
+    @model_validator(mode="after")
+    def validate_max_workers(self) -> "ParallelConfig":
+        if self.max_workers is not None and self.max_workers < 1:
+            raise ValueError("max_workers must be at least 1")
+        return self
+
 
 class CacheConfig(BaseModel):
     enabled: bool = D.CACHE_ENABLED

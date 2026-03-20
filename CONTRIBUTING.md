@@ -7,12 +7,11 @@ Thanks for contributing to `imgclean`.
 ```bash
 git clone https://github.com/Weiykong/imgclean.git
 cd imgclean
-python3.10 -m venv .venv
-source .venv/bin/activate
+python3 -m pip install --user uv
 make install
 ```
 
-If you already have a Python 3.10+ environment, `make install` is enough.
+`make install` bootstraps a local `.venv` with Python 3.11 via `uv`.
 
 ## Common commands
 
@@ -26,7 +25,7 @@ These map to:
 
 - `make install`: editable install with dev dependencies
 - `make test`: run the test suite with `python -m pytest`
-- `make lint`: run `ruff check .`
+- `make lint`: run the C901 complexity gate with `ruff check --select C901 src tests`
 - `make check`: run lint and tests together
 
 ## Project shape
