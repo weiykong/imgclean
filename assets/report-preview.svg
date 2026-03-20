@@ -1,0 +1,50 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" rx="28" fill="#F4F1E8"/>
+  <rect x="28" y="28" width="1224" height="664" rx="22" fill="#FCFAF5" stroke="#D8D0C2" stroke-width="2"/>
+  <rect x="64" y="56" width="1152" height="54" rx="16" fill="#1D2A3A"/>
+  <circle cx="100" cy="83" r="7" fill="#FF8B7B"/>
+  <circle cx="124" cy="83" r="7" fill="#F6C453"/>
+  <circle cx="148" cy="83" r="7" fill="#71C78B"/>
+  <text x="182" y="90" fill="#F8F5EE" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">imgclean_report.html</text>
+
+  <text x="72" y="160" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="700">Dataset Audit Summary</text>
+  <text x="72" y="192" fill="#6A6E76" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18">12,438 files scanned in 4.2 seconds</text>
+
+  <rect x="72" y="226" width="252" height="108" rx="18" fill="#FFF9EF" stroke="#E6D9B8" stroke-width="2"/>
+  <text x="96" y="264" fill="#8A6A0A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="600">Near-duplicates</text>
+  <text x="96" y="310" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="38" font-weight="800">1,083</text>
+
+  <rect x="344" y="226" width="252" height="108" rx="18" fill="#FFF1F0" stroke="#E8C0BB" stroke-width="2"/>
+  <text x="368" y="264" fill="#A1493F" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="600">Corrupted files</text>
+  <text x="368" y="310" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="38" font-weight="800">41</text>
+
+  <rect x="616" y="226" width="252" height="108" rx="18" fill="#F2F7FF" stroke="#C9D7F2" stroke-width="2"/>
+  <text x="640" y="264" fill="#315D98" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="600">Leakage cases</text>
+  <text x="640" y="310" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="38" font-weight="800">63</text>
+
+  <rect x="888" y="226" width="252" height="108" rx="18" fill="#F3F2FC" stroke="#D6D1F1" stroke-width="2"/>
+  <text x="912" y="264" fill="#5A4DA1" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="600">Blurry images</text>
+  <text x="912" y="310" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="38" font-weight="800">97</text>
+
+  <rect x="72" y="374" width="1068" height="250" rx="20" fill="#FFFFFF" stroke="#DDD5C8" stroke-width="2"/>
+  <text x="96" y="414" fill="#1D2A3A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">Top findings</text>
+
+  <rect x="96" y="442" width="1020" height="44" rx="12" fill="#F4F6F8"/>
+  <text x="118" y="470" fill="#5E6672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">ISSUE</text>
+  <text x="302" y="470" fill="#5E6672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">SEVERITY</text>
+  <text x="482" y="470" fill="#5E6672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">FILE</text>
+  <text x="1010" y="470" fill="#5E6672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">SCORE</text>
+
+  <rect x="96" y="500" width="1020" height="40" rx="10" fill="#FFF9EF"/>
+  <text x="118" y="526" fill="#8A6A0A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="700">near_duplicate</text>
+  <text x="302" y="526" fill="#8A6A0A" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">warning</text>
+  <text x="482" y="526" fill="#36404C" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">train/cat_021.jpg  ↔  val/cat_113.jpg</text>
+  <text x="1030" y="526" fill="#36404C" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">3</text>
+
+  <rect x="96" y="550" width="1020" height="40" rx="10" fill="#FFF1F0"/>
+  <text x="118" y="576" fill="#A1493F" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="700">corrupted</text>
+  <text x="302" y="576" fill="#A1493F" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">error</text>
+  <text x="482" y="576" fill="#36404C" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">raw/import/broken_frame_77.jpg</text>
+  <text x="1022" y="576" fill="#36404C" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">n/a</text>
+  <text x="96" y="656" fill="#6A6E76" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Self-contained HTML output designed for dataset review, QA handoff, and release gates.</text>
+</svg>

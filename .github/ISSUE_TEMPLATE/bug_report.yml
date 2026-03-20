@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible defect in imgclean.
+title: "[bug] "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and what you expected instead.
+      placeholder: imgclean scan exits when it reaches a truncated TIFF file...
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Paste the command, config, and minimal dataset details needed to reproduce.
+      placeholder: |
+        1. Run `imgclean scan ./dataset --report-dir ./reports`
+        2. Use this config:
+        3. Include sample image properties or stack trace
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: imgclean version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: 3.11.9
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Extra context
+      description: Add logs, screenshots, or notes about image formats and dataset layout.

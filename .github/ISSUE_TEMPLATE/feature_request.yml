@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest a new workflow, check, or output for imgclean.
+title: "[feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      placeholder: I want to detect watermark-heavy outliers before labeling begins...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the workflow, CLI, or API shape you want.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: List current workarounds or other tools you evaluated.

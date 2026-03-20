@@ -2,18 +2,19 @@
 
 # 🧹 imgclean
 
-**Audit and clean image datasets before training, labeling, or sharing.**
+**Find duplicates, blur, corruption, leakage, and quality issues in image datasets before they ship.**
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-45%20passed-brightgreen)](#)
+[![CI](https://github.com/Weiykong/imgclean/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Weiykong/imgclean/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/badge/pypi-imgclean-orange?logo=pypi&logoColor=white)](https://pypi.org/project/imgclean/)
+[![Tests](https://img.shields.io/badge/tests-45%20cases-brightgreen)](#-test-suite)
 
 </div>
 
 ---
 
-Most image datasets have hidden problems. imgclean finds them **before** they hurt your model.
+Most image datasets have hidden problems. imgclean makes them obvious in one pass, with a CLI that is fast to try and reports that are easy to review with a team.
 
 ```
 Dataset scanned: 12,438 files  (4.2s)
@@ -27,11 +28,34 @@ Dataset scanned: 12,438 files  (4.2s)
     9   extreme aspect ratios
 ```
 
+<p align="center">
+  <img src="assets/report-preview.svg" alt="imgclean HTML report preview" width="920" />
+</p>
+
+## Highlights
+
+- One command to scan a dataset and export HTML, JSON, and CSV reports.
+- Built-in checks for corruption, blur, exposure, resolution, aspect ratio, duplicates, and split leakage.
+- Works as both a CLI tool and a Python API for pipelines and notebooks.
+- Safe cleanup workflow with quarantine and representative-keep actions.
+- Test-backed core with 45 automated test cases and GitHub Actions CI.
+
+## Try it in 60 seconds
+
+```bash
+pip install imgclean
+imgclean scan ./dataset --report-dir ./reports --open
+```
+
+The scan writes a shareable HTML report plus machine-readable JSON and CSV outputs in `./reports`.
+
 ---
 
 ## Contents
 
 - [Why imgclean](#-why-imgclean)
+- [Highlights](#highlights)
+- [Try it in 60 seconds](#try-it-in-60-seconds)
 - [Installation](#-installation)
 - [Quick start](#-quick-start)
 - [CLI reference](#-cli-reference)
@@ -41,6 +65,8 @@ Dataset scanned: 12,438 files  (4.2s)
 - [Outputs](#-outputs)
 - [Architecture](#-architecture)
 - [Optional: embeddings](#-optional-embedding-based-features)
+- [Test suite](#-test-suite)
+- [Contributing](#contributing)
 - [Roadmap](#-roadmap)
 
 ---
@@ -75,10 +101,10 @@ pip install "imgclean[embeddings]"   # torch + open_clip + faiss-cpu
 **Development install:**
 
 ```bash
-git clone https://github.com/weiyuankong/imgclean
+git clone https://github.com/Weiykong/imgclean.git
 cd imgclean
-pip install -e ".[dev]"
-pytest
+make install
+make test
 ```
 
 **Supported formats:** JPEG · PNG · BMP · GIF · TIFF · WebP
@@ -691,6 +717,19 @@ GPU is used automatically when available; falls back to CPU.
 
 ---
 
+## 🧪 Test suite
+
+The repo currently ships with **45 automated tests** covering configuration, hashing, duplicate detection, quality checks, reporting, and a synthetic end-to-end scan pipeline.
+
+```bash
+make test
+make lint
+```
+
+CI runs on Python 3.10, 3.11, and 3.12 for pushes and pull requests.
+
+---
+
 ## 🗺️ Roadmap
 
 | Version | Features |
@@ -705,16 +744,16 @@ GPU is used automatically when available; falls back to CPU.
 ## Contributing
 
 ```bash
-git clone https://github.com/weiyuankong/imgclean
+git clone https://github.com/Weiykong/imgclean.git
 cd imgclean
-pip install -e ".[dev]"
-pytest                      # 45 tests
-ruff check src/ tests/      # lint
-mypy src/                   # type check
+make install
+make check
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the local setup, command reference, and PR checklist.
 
 ---
 
 ## License
 
-[MIT](LICENSE) © weiyuankong
+[MIT](LICENSE) © Wei Yuan Kong
