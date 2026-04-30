@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
-
 import typer
 
 from imgclean.cli._common import add_optional_workers_override, print_summary, write_reports
@@ -18,12 +16,22 @@ app = typer.Typer(help="Find exact and near-duplicate images.")
 @app.callback(invoke_without_command=True)
 def dedup(
     path: Path = typer.Argument(..., help="Dataset directory to check."),
-    method: str = typer.Option("phash", "--method", "-m", help="Hash method: phash, dhash, sha256."),
-    threshold: int = typer.Option(8, "--threshold", "-t", help="Max Hamming distance for near-duplicates."),
-    config_file: Optional[Path] = typer.Option(None, "--config", "-c"),
-    report_dir: Optional[Path] = typer.Option(None, "--report-dir", "-o"),
+    method: str = typer.Option(
+        "phash",
+        "--method",
+        "-m",
+        help="Duplicate method: phash for visual matches, sha256 for byte-identical files.",
+    ),
+    threshold: int = typer.Option(
+        8,
+        "--threshold",
+        "-t",
+        help="Max Hamming distance for near-duplicates.",
+    ),
+    config_file: Path | None = typer.Option(None, "--config", "-c"),
+    report_dir: Path | None = typer.Option(None, "--report-dir", "-o"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
-    workers: Optional[int] = typer.Option(
+    workers: int | None = typer.Option(
         None,
         "--workers",
         "-w",
@@ -32,6 +40,13 @@ def dedup(
     ),
 ) -> None:
     configure_logging(verbose)
+
+    method = method.lower()
+    if method not in {"phash", "sha256"}:
+        raise typer.BadParameter(
+            "method must be one of: phash, sha256",
+            param_hint="--method",
+        )
 
     overrides = add_optional_workers_override(
         {
@@ -43,7 +58,7 @@ def dedup(
                 "blur": False,
                 "exposure": False,
                 "exact_duplicates": True,
-                "perceptual_duplicates": True,
+                "perceptual_duplicates": method == "phash",
                 "embedding_duplicates": False,
                 "split_leakage": False,
                 "outliers": False,

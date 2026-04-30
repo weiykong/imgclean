@@ -5,9 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import typer
 from rich.console import Console
 from rich.table import Table
 
+from imgclean.models.issue_types import IssueType
 from imgclean.models.report import ScanReport
 from imgclean.reports import write_csv, write_html, write_json
 from imgclean.utils.logging import log
@@ -29,6 +31,15 @@ def parse_issue_filter(issues: str | None) -> list[str] | None:
         return None
 
     parsed = [issue.strip() for issue in issues.split(",") if issue.strip()]
+    valid_issue_types = {issue.value for issue in IssueType}
+    invalid = sorted(set(parsed) - valid_issue_types)
+    if invalid:
+        valid = ", ".join(sorted(valid_issue_types))
+        raise typer.BadParameter(
+            f"unknown issue type(s): {', '.join(invalid)}. Valid issue types: {valid}",
+            param_hint="--issues",
+        )
+
     return parsed or None
 
 

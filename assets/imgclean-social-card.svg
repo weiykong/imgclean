@@ -1,0 +1,184 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">imgclean repository card</title>
+  <desc id="desc">A polished visual showing imgclean scanning an image dataset and producing quality, duplicate, corruption, and leakage findings.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101820"/>
+      <stop offset="0.52" stop-color="#152231"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="92" y1="88" x2="1188" y2="566" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#EEF2F7"/>
+    </linearGradient>
+    <linearGradient id="scan" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#38BDF8" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#38BDF8" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#22C55E" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#22C55E"/>
+    </linearGradient>
+    <filter id="shadow" x="-8%" y="-12%" width="116%" height="130%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#020617" flood-opacity="0.38"/>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0F172A" flood-opacity="0.18"/>
+    </filter>
+    <pattern id="dotGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#FFFFFF" opacity="0.08"/>
+    </pattern>
+    <clipPath id="datasetClip">
+      <rect x="112" y="232" width="420" height="252" rx="22"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1280" height="640" rx="36" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#dotGrid)"/>
+  <path d="M884 80C1007 66 1116 111 1192 184" stroke="#38BDF8" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M794 570C930 516 1070 526 1190 596" stroke="#22C55E" stroke-opacity="0.15" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="64" y="56" width="1152" height="528" rx="30" fill="url(#panel)"/>
+    <rect x="65" y="57" width="1150" height="526" rx="29" stroke="#CBD5E1" stroke-width="2"/>
+  </g>
+
+  <g transform="translate(96 92)">
+    <rect width="44" height="44" rx="12" fill="url(#accent)"/>
+    <path d="M13 23.5L20 30.5L33 15.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="60" y="32" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="34" font-weight="800">imgclean</text>
+    <text x="0" y="78" fill="#475569" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="18" font-weight="500">Find duplicates, blur, corruption, leakage, and quality issues before image datasets ship.</text>
+  </g>
+
+  <g transform="translate(848 94)">
+    <rect width="240" height="42" rx="21" fill="#0F172A"/>
+    <text x="22" y="27" fill="#86EFAC" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">$ pip install imgclean</text>
+    <rect x="256" width="72" height="42" rx="21" fill="#E0F2FE"/>
+    <text x="292" y="27" fill="#0369A1" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">CLI</text>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="112" y="192" width="420" height="292" rx="24" fill="#FFFFFF" stroke="#D8E0EA"/>
+    <text x="140" y="220" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="800">Dataset</text>
+    <text x="230" y="220" fill="#64748B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">12,438 images</text>
+
+    <g clip-path="url(#datasetClip)">
+      <rect x="112" y="232" width="420" height="252" fill="#F8FAFC"/>
+      <g opacity="0.96">
+        <rect x="136" y="254" width="76" height="60" rx="12" fill="#FDE68A"/>
+        <circle cx="158" cy="275" r="9" fill="#F59E0B"/>
+        <path d="M136 304L164 284L181 298L196 286L212 304V314H136V304Z" fill="#92400E" opacity="0.42"/>
+
+        <rect x="224" y="254" width="76" height="60" rx="12" fill="#DCFCE7"/>
+        <circle cx="246" cy="276" r="9" fill="#22C55E"/>
+        <path d="M224 304L251 282L268 296L286 279L300 300V314H224V304Z" fill="#15803D" opacity="0.34"/>
+
+        <rect x="312" y="254" width="76" height="60" rx="12" fill="#FEE2E2"/>
+        <path d="M330 272H370M330 288H370M330 304H356" stroke="#EF4444" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+
+        <rect x="400" y="254" width="76" height="60" rx="12" fill="#DBEAFE"/>
+        <circle cx="422" cy="276" r="9" fill="#3B82F6"/>
+        <path d="M400 303L428 284L448 299L464 286L476 303V314H400V303Z" fill="#1D4ED8" opacity="0.33"/>
+
+        <rect x="136" y="326" width="76" height="60" rx="12" fill="#DBEAFE"/>
+        <circle cx="158" cy="348" r="9" fill="#3B82F6"/>
+        <path d="M136 375L164 356L184 371L200 358L212 375V386H136V375Z" fill="#1D4ED8" opacity="0.33"/>
+
+        <rect x="224" y="326" width="76" height="60" rx="12" fill="#F1F5F9"/>
+        <path d="M238 346H286M238 362H276" stroke="#94A3B8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M239 378L286 342" stroke="#EF4444" stroke-width="5" stroke-linecap="round"/>
+
+        <rect x="312" y="326" width="76" height="60" rx="12" fill="#FDE68A"/>
+        <circle cx="334" cy="347" r="9" fill="#F59E0B"/>
+        <path d="M312 376L340 356L357 370L372 358L388 376V386H312V376Z" fill="#92400E" opacity="0.42"/>
+
+        <rect x="400" y="326" width="76" height="60" rx="12" fill="#EDE9FE"/>
+        <path d="M418 346H459M418 362H466M418 378H449" stroke="#8B5CF6" stroke-width="7" stroke-linecap="round" opacity="0.72"/>
+
+        <rect x="136" y="398" width="76" height="60" rx="12" fill="#DCFCE7"/>
+        <circle cx="158" cy="420" r="9" fill="#22C55E"/>
+        <path d="M136 448L163 426L180 440L198 423L212 444V458H136V448Z" fill="#15803D" opacity="0.34"/>
+
+        <rect x="224" y="398" width="76" height="60" rx="12" fill="#FEE2E2"/>
+        <path d="M241 414L284 448M284 414L241 448" stroke="#EF4444" stroke-width="6" stroke-linecap="round"/>
+
+        <rect x="312" y="398" width="76" height="60" rx="12" fill="#DBEAFE"/>
+        <circle cx="334" cy="420" r="9" fill="#3B82F6"/>
+        <path d="M312 448L340 429L360 444L376 431L388 448V458H312V448Z" fill="#1D4ED8" opacity="0.33"/>
+
+        <rect x="400" y="398" width="76" height="60" rx="12" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <path d="M418 418H459M418 434H466M418 450H449" stroke="#94A3B8" stroke-width="7" stroke-linecap="round"/>
+      </g>
+
+      <rect x="112" y="213" width="420" height="88" fill="url(#scan)" opacity="0.9">
+        <animate attributeName="y" values="202;466;202" dur="4.8s" repeatCount="indefinite"/>
+      </rect>
+      <line x1="112" x2="532" y1="258" y2="258" stroke="#38BDF8" stroke-width="3" stroke-opacity="0.8">
+        <animate attributeName="y1" values="246;510;246" dur="4.8s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="246;510;246" dur="4.8s" repeatCount="indefinite"/>
+      </line>
+    </g>
+  </g>
+
+  <g transform="translate(578 190)">
+    <rect width="118" height="36" rx="18" fill="#ECFDF5"/>
+    <circle cx="24" cy="18" r="6" fill="#22C55E"/>
+    <text x="42" y="23" fill="#047857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">scanning</text>
+    <path d="M-28 156H96" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
+    <path d="M86 146L102 156L86 166" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="704" y="176" width="424" height="330" rx="24" fill="#0F172A"/>
+    <rect x="704" y="176" width="424" height="330" rx="24" stroke="#334155"/>
+    <rect x="704" y="176" width="424" height="52" rx="24" fill="#1E293B"/>
+    <circle cx="736" cy="202" r="6" fill="#F87171"/>
+    <circle cx="758" cy="202" r="6" fill="#FBBF24"/>
+    <circle cx="780" cy="202" r="6" fill="#34D399"/>
+    <text x="914" y="207" fill="#94A3B8" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">imgclean_report.html</text>
+
+    <text x="736" y="266" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="800">Audit summary</text>
+    <text x="736" y="292" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14">HTML, JSON, and CSV outputs for review</text>
+
+    <g transform="translate(736 320)">
+      <rect width="82" height="74" rx="14" fill="#1E293B"/>
+      <text x="18" y="28" fill="#FACC15" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="800">1k+</text>
+      <text x="18" y="52" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700">dupes</text>
+
+      <rect x="98" width="82" height="74" rx="14" fill="#1E293B"/>
+      <text x="116" y="28" fill="#F87171" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="800">41</text>
+      <text x="116" y="52" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700">bad files</text>
+
+      <rect x="196" width="82" height="74" rx="14" fill="#1E293B"/>
+      <text x="214" y="28" fill="#38BDF8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="800">63</text>
+      <text x="214" y="52" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700">leaks</text>
+
+      <rect x="294" width="82" height="74" rx="14" fill="#1E293B"/>
+      <text x="312" y="28" fill="#34D399" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="800">8x</text>
+      <text x="312" y="52" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700">workers</text>
+    </g>
+
+    <g transform="translate(736 424)" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="700">
+      <rect width="360" height="32" rx="8" fill="#182234"/>
+      <text x="14" y="21" fill="#FACC15">near_duplicate</text>
+      <text x="156" y="21" fill="#CBD5E1">train/cat_021.jpg</text>
+      <rect y="42" width="360" height="32" rx="8" fill="#182234"/>
+      <text x="14" y="63" fill="#F87171">corrupted</text>
+      <text x="156" y="63" fill="#CBD5E1">raw/broken_77.jpg</text>
+    </g>
+  </g>
+
+  <g transform="translate(118 526)">
+    <rect width="202" height="36" rx="18" fill="#E0F2FE"/>
+    <text x="101" y="23" fill="#0369A1" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">duplicates</text>
+    <rect x="216" width="142" height="36" rx="18" fill="#FEE2E2"/>
+    <text x="287" y="23" fill="#B91C1C" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">corruption</text>
+    <rect x="372" width="102" height="36" rx="18" fill="#FEF3C7"/>
+    <text x="423" y="23" fill="#92400E" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">blur</text>
+    <rect x="488" width="116" height="36" rx="18" fill="#DCFCE7"/>
+    <text x="546" y="23" fill="#166534" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">cleanup</text>
+  </g>
+</svg>

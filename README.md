@@ -32,7 +32,7 @@ $ imgclean scan ./dataset --workers 8 --report-dir ./reports
 ```
 
 <p align="center">
-  <img src="assets/report-preview.svg" alt="imgclean HTML report preview" width="920" />
+  <img src="assets/imgclean-social-card.svg" alt="imgclean scans an image dataset and reports duplicates, corruption, leakage, and quality issues" width="920" />
 </p>
 
 ## Highlights
@@ -215,13 +215,14 @@ imgclean dedup <path> [OPTIONS]
 
 | Option | Default | Description |
 |---|---|---|
-| `--threshold, -t` | `8` | Max Hamming distance (0 = exact byte matches only) |
+| `--method, -m` | `phash` | Duplicate method: `phash` for visual matches, `sha256` for byte-identical files |
+| `--threshold, -t` | `8` | Max pHash Hamming distance for visual near-duplicates |
 | `--report-dir, -o` | `.` | Output directory |
 | `--workers, -w` | auto | Max worker threads for image scanning |
 
 ```bash
 imgclean dedup ./dataset --threshold 6 --workers 8
-imgclean dedup ./dataset --threshold 0   # exact duplicates only
+imgclean dedup ./dataset --method sha256   # exact byte duplicates only
 ```
 
 ---
@@ -303,7 +304,7 @@ imgclean quarantine ./dataset --issues corrupted,blurry
 imgclean quarantine ./dataset --issues corrupted,blurry --out ./review --execute
 ```
 
-**Valid issue types:** `corrupted` · `low_resolution` · `aspect_ratio` · `blurry` · `underexposed` · `overexposed` · `exact_duplicate` · `near_duplicate` · `split_leakage` · `outlier`
+**Valid issue types:** `corrupted` · `low_resolution` · `aspect_ratio` · `blurry` · `underexposed` · `overexposed` · `exact_duplicate` · `near_duplicate` · `embedding_duplicate` · `split_leakage` · `outlier`
 
 ---
 

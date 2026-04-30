@@ -119,3 +119,24 @@ def test_clean_execute_moves_only_selected_issue_types(
     assert not corrupted.exists()
     assert (quarantine_dir / "broken.jpg").exists()
     assert blurry.exists()
+
+
+def test_clean_rejects_unknown_issue_type(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    dataset = tmp_path / "dataset"
+    dataset.mkdir()
+
+    monkeypatch.setattr(
+        "imgclean.cli.clean.run_scan",
+        lambda paths, config: _report(root=dataset),
+    )
+
+    result = runner.invoke(
+        app,
+        ["clean", "--issues", "blury", str(dataset)],
+    )
+
+    assert result.exit_code != 0
+    assert "unknown issue type" in result.output

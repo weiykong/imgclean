@@ -8,6 +8,7 @@ from imgclean.config.schema import Config
 from imgclean.core.pipeline import run_pipeline
 from imgclean.core.registry import build_checks
 from imgclean.core.scanner import scan_directory, scan_splits
+from imgclean.models.dataset import Dataset
 from imgclean.models.finding import Finding
 from imgclean.models.report import ReportSummary, ScanReport
 from imgclean.utils.logging import log

@@ -49,3 +49,37 @@ def test_scan_workers_flag_overrides_config(monkeypatch, tmp_path: Path) -> None
 
     assert result.exit_code == 0
     assert captured["overrides"]["parallel"]["max_workers"] == 4
+
+
+def test_dedup_sha256_method_disables_perceptual_duplicates(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    captured: dict[str, object] = {}
+
+    def fake_load_config(path, overrides):
+        captured["overrides"] = overrides
+        return Config.model_validate(overrides)
+
+    monkeypatch.setattr("imgclean.cli.dedup.configure_logging", lambda verbose: None)
+    monkeypatch.setattr("imgclean.cli.dedup.load_config", fake_load_config)
+    monkeypatch.setattr("imgclean.cli.dedup.run_scan", lambda paths, config: _report())
+    monkeypatch.setattr("imgclean.cli.dedup.print_summary", lambda report: None)
+    monkeypatch.setattr(
+        "imgclean.cli.dedup.write_reports",
+        lambda report, output_dir, cfg_report: None,
+    )
+
+    result = runner.invoke(app, ["dedup", "--method", "sha256", str(tmp_path)])
+
+    assert result.exit_code == 0
+    checks = captured["overrides"]["checks"]
+    assert checks["exact_duplicates"] is True
+    assert checks["perceptual_duplicates"] is False
+
+
+def test_dedup_rejects_unknown_method(tmp_path: Path) -> None:
+    result = runner.invoke(app, ["dedup", "--method", "dhash", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "method must be one of" in result.output

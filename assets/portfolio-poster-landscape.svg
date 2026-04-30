@@ -1,0 +1,189 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- premium definitions -->
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+      .sans { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; }
+      .title { font-size: 72px; font-weight: 800; letter-spacing: -0.04em; }
+      .subtitle { font-size: 24px; font-weight: 500; letter-spacing: -0.01em; }
+      .section-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+      .body-text { font-size: 18px; font-weight: 400; line-height: 1.6; }
+      .card-title { font-size: 20px; font-weight: 700; }
+      .card-body { font-size: 15px; font-weight: 500; opacity: 0.8; }
+      .badge-text { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    </style>
+    
+    <linearGradient id="bg_grad" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A0F14"/>
+      <stop offset="1" stop-color="#141B23"/>
+    </linearGradient>
+
+    <linearGradient id="accent_grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF8C37"/>
+      <stop offset="100%" stop-color="#FF5C00"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="soft_shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <clipPath id="top_round">
+      <rect x="0" y="0" width="1020" height="40" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="900" rx="40" fill="url(#bg_grad)"/>
+  
+  <!-- Decorative Abstract Elements -->
+  <circle cx="1500" cy="100" r="300" fill="#FF5C00" opacity="0.05">
+    <animate attributeName="opacity" values="0.05;0.08;0.05" dur="10s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="100" cy="800" r="400" fill="#38BDF8" opacity="0.03"/>
+
+  <!-- Grid Pattern Overlay -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFFFFF" stroke-width="0.5" opacity="0.05"/>
+  </pattern>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+
+  <!-- Header Section -->
+  <g transform="translate(80, 80)">
+    <!-- Logo & Title -->
+    <path d="M0 0H48V48H0V0Z" fill="url(#accent_grad)" rx="12"/>
+    <path d="M12 24L20 32L36 16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="64" y="38" class="sans title" fill="white">imgclean</text>
+    <text x="0" y="80" class="sans subtitle" fill="#94A3B8">Professional Dataset QA & Cleanup for Computer Vision</text>
+    
+    <!-- Badges -->
+    <g transform="translate(0, 110)">
+      <rect width="140" height="32" rx="16" fill="#1E293B" stroke="#334155"/>
+      <text x="70" y="21" class="sans badge-text" fill="#38BDF8" text-anchor="middle">Python 3.10+</text>
+      
+      <rect x="150" width="120" height="32" rx="16" fill="#1E293B" stroke="#334155"/>
+      <text x="210" y="21" class="sans badge-text" fill="#FACC15" text-anchor="middle">PyPI Package</text>
+      
+      <rect x="280" width="100" height="32" rx="16" fill="#1E293B" stroke="#334155"/>
+      <text x="330" y="21" class="sans badge-text" fill="#4ADE80" text-anchor="middle">MIT License</text>
+    </g>
+  </g>
+
+  <!-- Main Content Layout -->
+  
+  <!-- Left Column: The Problem & Solution -->
+  <g transform="translate(80, 320)">
+    <text x="0" y="0" class="sans section-title" fill="#F8FAFC">Why imgclean?</text>
+    <text x="0" y="35" class="sans body-text" fill="#94A3B8" width="400">
+      Hidden issues in training data lead to model drift, 
+      inflated metrics, and silent pipeline failures.
+    </text>
+
+    <!-- Feature Cards -->
+    <g transform="translate(0, 80)">
+      <!-- Card 1 -->
+      <rect width="360" height="100" rx="20" fill="#1E293B" opacity="0.6"/>
+      <circle cx="40" cy="50" r="15" fill="#EF4444" opacity="0.2"/>
+      <path d="M35 45L45 55M45 45L35 55" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+      <text x="75" y="45" class="sans card-title" fill="white">Detection</text>
+      <text x="75" y="68" class="sans card-body" fill="#94A3B8">Blur, Corruption, Duplicates, Leakage</text>
+
+      <!-- Card 2 -->
+      <g transform="translate(0, 120)">
+        <rect width="360" height="100" rx="20" fill="#1E293B" opacity="0.6"/>
+        <circle cx="40" cy="50" r="15" fill="#38BDF8" opacity="0.2"/>
+        <path d="M30 50H50M40 40V60" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+        <text x="75" y="45" class="sans card-title" fill="white">Speed</text>
+        <text x="75" y="68" class="sans card-body" fill="#94A3B8">Parallel processing & feature caching</text>
+      </g>
+
+      <!-- Card 3 -->
+      <g transform="translate(0, 240)">
+        <rect width="360" height="100" rx="20" fill="#1E293B" opacity="0.6"/>
+        <circle cx="40" cy="50" r="15" fill="#4ADE80" opacity="0.2"/>
+        <path d="M32 50L38 56L48 44" stroke="#4ADE80" stroke-width="2" stroke-linecap="round"/>
+        <text x="75" y="45" class="sans card-title" fill="white">Reporting</text>
+        <text x="75" y="68" class="sans card-body" fill="#94A3B8">Interactive HTML, JSON, and CSV</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Center: Striking Visual (The Report Snapshot) -->
+  <g transform="translate(500, 250)" filter="url(#soft_shadow)">
+    <!-- Main Report Frame -->
+    <rect width="1020" height="500" rx="24" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+    
+    <!-- Browser Header -->
+    <rect width="1020" height="40" rx="24" fill="#1E293B"/>
+    <circle cx="30" cy="20" r="6" fill="#EF4444"/>
+    <circle cx="50" cy="20" r="6" fill="#FACC15"/>
+    <circle cx="70" cy="20" r="6" fill="#4ADE80"/>
+    <text x="510" y="26" class="mono" fill="#64748B" font-size="14" text-anchor="middle">imgclean-report.html</text>
+
+
+    <!-- Report Content Mockup -->
+    <g transform="translate(40, 80)">
+      <text x="0" y="0" class="sans" fill="white" font-size="32" font-weight="700">Audit Summary</text>
+      <text x="0" y="30" class="sans" fill="#94A3B8" font-size="16">12,438 files analyzed in 4.2s</text>
+      
+      <!-- Summary Chips -->
+      <g transform="translate(0, 60)">
+        <rect width="220" height="120" rx="16" fill="#334155" opacity="0.4"/>
+        <text x="20" y="40" class="sans" fill="#94A3B8" font-size="14" font-weight="600">NEAR-DUPLICATES</text>
+        <text x="20" y="90" class="sans" fill="#FACC15" font-size="44" font-weight="800">1,083</text>
+
+        <rect x="240" width="220" height="120" rx="16" fill="#334155" opacity="0.4"/>
+        <text x="260" y="40" class="sans" fill="#94A3B8" font-size="14" font-weight="600">CORRUPTED</text>
+        <text x="260" y="90" class="sans" fill="#EF4444" font-size="44" font-weight="800">41</text>
+
+        <rect x="480" width="220" height="120" rx="16" fill="#334155" opacity="0.4"/>
+        <text x="500" y="40" class="sans" fill="#94A3B8" font-size="14" font-weight="600">LEAKAGE</text>
+        <text x="500" y="90" class="sans" fill="#38BDF8" font-size="44" font-weight="800">63</text>
+        
+        <rect x="720" width="220" height="120" rx="16" fill="#334155" opacity="0.4"/>
+        <text x="740" y="40" class="sans" fill="#94A3B8" font-size="14" font-weight="600">QUALITY ISSUES</text>
+        <text x="740" y="90" class="sans" fill="#4ADE80" font-size="44" font-weight="800">152</text>
+      </g>
+      
+      <!-- Table Mock -->
+      <g transform="translate(0, 210)">
+        <rect width="940" height="160" rx="16" fill="#1E293B" stroke="#334155"/>
+        <rect x="20" y="20" width="900" height="30" rx="6" fill="#0F172A"/>
+        <text x="40" y="40" class="mono" fill="#475569" font-size="12">ISSUE TYPE      SEVERITY      PATH                                SCORE</text>
+        
+        <text x="40" y="80" class="mono" fill="#FACC15" font-size="14" font-weight="700">near_duplicate  warning       train/img_0102.jpg                  0.98</text>
+        <path d="M40 95H900" stroke="#334155" stroke-width="1"/>
+        <text x="40" y="120" class="mono" fill="#EF4444" font-size="14" font-weight="700">corrupted       error         val/sample_ff.png                   n/a</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Command Section -->
+  <g transform="translate(80, 780)">
+    <rect width="400" height="60" rx="12" fill="#0F172A" stroke="#334155"/>
+    <text x="20" y="37" class="mono" fill="#4ADE80" font-size="18">$ pip install imgclean</text>
+    
+    <g transform="translate(450, 0)">
+      <text x="0" y="20" class="sans" fill="#94A3B8" font-size="14" font-weight="700" text-transform="uppercase">Built for</text>
+      <text x="0" y="45" class="sans" fill="white" font-size="20" font-weight="700">CV Engineers & Data Ops</text>
+    </g>
+    
+    <g transform="translate(750, 0)">
+      <text x="0" y="20" class="sans" fill="#94A3B8" font-size="14" font-weight="700" text-transform="uppercase">Scan Speed</text>
+      <text x="0" y="45" class="sans" fill="white" font-size="20" font-weight="700">~3,000 images/sec</text>
+    </g>
+    
+    <g transform="translate(1050, 0)">
+      <text x="0" y="20" class="sans" fill="#94A3B8" font-size="14" font-weight="700" text-transform="uppercase">Integration</text>
+      <text x="0" y="45" class="sans" fill="white" font-size="20" font-weight="700">CLI, Python API, GitHub Actions</text>
+    </g>
+  </g>
+
+  <!-- Accented bottom bar -->
+  <rect x="0" y="885" width="1600" height="15" fill="url(#accent_grad)"/>
+</svg>
