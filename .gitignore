@@ -47,3 +47,5 @@ quarantine/
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb_checkpoints/
+assets/malt-portfolio-figure.svg
+assets/portfolio-poster-landscape.svg
